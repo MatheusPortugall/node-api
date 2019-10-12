@@ -35,3 +35,17 @@ exports.put = (req, res, next) => {
 exports.delete = (req, res, next) => {
     res.status(200).send(req.body);
 };
+
+exports.getBySlug = (req, res, next) => {
+    Product.findOne({
+        slug: req.params.slug,
+        active: true
+    }, 'title price slug tags'
+    )
+    .then(data => {
+        res.status(200).send(data);
+    })
+    .catch(e => {
+        res.status(400).send(e);
+    });
+};
