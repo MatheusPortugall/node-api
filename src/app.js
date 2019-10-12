@@ -8,6 +8,9 @@ const app = express();
 mongoose.connect('mongodb://localhost:27017/nodestr', {useNewUrlParser: true});
 mongoose.Promise = global.Promise;
 
+//loading models
+const Product = require("./models/product");
+
 //loading routes
 const indexRoute = require('./routes/index-route');
 const productRoute = require('./routes/product-route');
