@@ -2,9 +2,40 @@
 const mongoose = require("mongoose");
 const Product = mongoose.model("Product");
 const ValidationContract = require("../validators/fluent-validator");
+const repository = require("../repositories/product-repository");
 
 exports.get = (req, res, next) => {
-    Product.find({ active: true }, 'title price slug')
+    repository.get()
+    .then(data => {
+        res.status(200).send(data);
+    })
+    .catch(e => {
+        res.status(400).send(e);
+    });
+};
+
+exports.getBySlug = (req, res, next) => {
+    repository.getBySlug(req.params.slug)
+    .then(data => {
+        res.status(200).send(data);
+    })
+    .catch(e => {
+        res.status(400).send(e);
+    });
+};
+
+exports.getById = (req, res, next) => {
+    repository.getById(req.params.id)
+    .then(data => {
+        res.status(200).send(data);
+    })
+    .catch(e => {
+        res.status(400).send(e);
+    });
+};
+
+exports.getByTag = (req, res, next) => {
+    repository.getByTag(req.params.tag)
     .then(data => {
         res.status(200).send(data);
     })
@@ -24,8 +55,7 @@ exports.post = (req, res, next) => {
         return;
     }
 
-    var product = new Product(req.body);
-    product.save()
+    repository.create(req.body)
     .then(x => {
         res.status(201).send({success: true, message: "Produto cadastrado com sucesso!"});
     })
@@ -36,13 +66,8 @@ exports.post = (req, res, next) => {
 };
 
 exports.put = (req, res, next) => {
-    Product.findByIdAndUpdate(req.params.id, {
-        $set: {
-            title: req.body.title,
-            description: req.body.description,
-            price: req.body.price,
-        }
-    }).then(x => {
+    repository.update(req.body, req.params.id)
+    .then(x => {
         res.status(201).send({success: true, message: "Produto atualizado com sucesso!" });
     }).catch(e => {
         res.status(400).send({success: false, message: "Falha ao atualizar produto!", error: e });
@@ -50,47 +75,10 @@ exports.put = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-    Product.findOneAndDelete(req.body.id)
+    repository.delete(req.body.id)
     .then(x => {
         res.status(200).send({success: true, message: "Produto removido com sucesso!" });
     }).catch(e => {
         res.status(400).send({success: false, message: "Falha ao remover produto!", error: e });
-    });
-};
-
-exports.getBySlug = (req, res, next) => {
-    Product.findOne({
-        slug: req.params.slug,
-        active: true
-    }, 'title price slug tags'
-    )
-    .then(data => {
-        res.status(200).send(data);
-    })
-    .catch(e => {
-        res.status(400).send(e);
-    });
-};
-
-exports.getById = (req, res, next) => {
-    Product.findById( req.params.id)
-    .then(data => {
-        res.status(200).send(data);
-    })
-    .catch(e => {
-        res.status(400).send(e);
-    });
-};
-
-exports.getByTag = (req, res, next) => {
-    Product.find({
-        tags: req.params.tag,
-        active: true,
-    }, 'title description price slug tags')
-    .then(data => {
-        res.status(200).send(data);
-    })
-    .catch(e => {
-        res.status(400).send(e);
     });
 };
