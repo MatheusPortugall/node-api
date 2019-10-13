@@ -32,14 +32,19 @@ exports.put = (req, res, next) => {
             price: req.body.price,
         }
     }).then(x => {
-        res.status(201).send({success: true, message: "Produto atualizado com sucesso!", data: x });
+        res.status(201).send({success: true, message: "Produto atualizado com sucesso!" });
     }).catch(e => {
         res.status(400).send({success: false, message: "Falha ao atualizar produto!", error: e });
     });
 };
 
 exports.delete = (req, res, next) => {
-    res.status(200).send(req.body);
+    Product.findOneAndDelete(req.body.id)
+    .then(x => {
+        res.status(200).send({success: true, message: "Produto removido com sucesso!" });
+    }).catch(e => {
+        res.status(400).send({success: false, message: "Falha ao remover produto!", error: e });
+    });
 };
 
 exports.getBySlug = (req, res, next) => {
