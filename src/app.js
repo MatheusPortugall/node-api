@@ -11,6 +11,7 @@ mongoose.Promise = global.Promise;
 //loading models
 const Product = require("./models/product");
 const Customer = require("./models/customer");
+const Order = require("./models/order");
 
 //loading routes
 const indexRoute = require('./routes/index-route');
