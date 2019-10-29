@@ -1,11 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
-
+const config = require("./config");
 const app = express();
 
 //database connection
-mongoose.connect('mongodb://localhost:27017/nodestr', {useNewUrlParser: true});
+mongoose.connect(config.connectionString, {useNewUrlParser: true});
 mongoose.Promise = global.Promise;
 
 //loading models
