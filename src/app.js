@@ -27,4 +27,6 @@ app.use('/products', productRoute);
 app.use('/customers', customerRoute);
 app.use('/orders', orderRoute);
 
+console.log('yoshi')
+
 module.exports = app;
